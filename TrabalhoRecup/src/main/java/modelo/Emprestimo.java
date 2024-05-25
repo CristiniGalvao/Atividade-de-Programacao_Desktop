@@ -13,14 +13,14 @@ import java.time.LocalDate;
 public class Emprestimo {
     private Livro livro;
     private Cliente cliente;
-    private LocalDate dataEmprestimo;
-    private LocalDate dataDevolucao;
+    private int dataEmprestimo;
+    private int dataDevolucao;
 
-    public Emprestimo(Livro livro, Cliente cliente, LocalDate dataEmprestimo) {
+    public Emprestimo(Livro livro, Cliente cliente, int dataEmprestimo) {
         this.livro = livro;
         this.cliente = cliente;
         this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataEmprestimo.plusDays(14); // 14 days from the loan date
+        this.dataDevolucao = dataEmprestimo + 14;
     }
 
     public Livro getLivro() {
@@ -31,11 +31,20 @@ public class Emprestimo {
         return cliente;
     }
 
-    public LocalDate getDataEmprestimo() {
+    public int getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public LocalDate getDataDevolucao() {
+    public void setDataEmprestimo(int dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
+    }
+
+    public int getDataDevolucao() {
         return dataDevolucao;
     }
+
+    public void setDataDevolucao(int dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
 }

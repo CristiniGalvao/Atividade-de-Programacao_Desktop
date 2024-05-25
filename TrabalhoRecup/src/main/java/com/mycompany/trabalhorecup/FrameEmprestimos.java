@@ -38,65 +38,64 @@ private ArrayList<Emprestimo> emprestimos;
         this.dispose(); 
     }
     public void emprestimoRealizado(){
-        String tituloLivro = tfTitulo.getText();
-        String nomeCliente = tfNomeCliente.getText();
-        int diaEmprestimo;
-        try {
-            diaEmprestimo = Integer.parseInt(tfDiaEmprestimo.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Dia do Empréstimo deve ser um número.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String mesAnoEmprestimo = tfMesAno.getText();
+String tituloLivro = tfTitulo.getText();
+    String nomeCliente = tfNomeCliente.getText();
+    int diaEmprestimo;
+    try {
+        diaEmprestimo = Integer.parseInt(tfDiaEmprestimo.getText());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Dia do Empréstimo deve ser um número.", "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    String mesAnoEmprestimo = tfMesAno.getText();
 
-        if (tituloLivro.isEmpty() || nomeCliente.isEmpty() || tfDiaEmprestimo.getText().isEmpty() || mesAnoEmprestimo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    if (tituloLivro.isEmpty() || nomeCliente.isEmpty() || tfDiaEmprestimo.getText().isEmpty() || mesAnoEmprestimo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        boolean livroEncontrado = false;
-        boolean clienteEncontrado = false;
-        Livro livroEmprestado = null;
-        Cliente clienteEmprestimo = null;
+    boolean livroEncontrado = false;
+    boolean clienteEncontrado = false;
+    Livro livroEmprestado = null;
+    Cliente clienteEmprestimo = null;
 
-        for (Livro livro : livros) {
-            if (livro.getTitulo().equalsIgnoreCase(tituloLivro)) {
-                livroEncontrado = true;
-                if (livro.getExemplaresDisponiveis() > 0) {
-                    livroEmprestado = livro;
-                    break;
-                } else {
-                    JOptionPane.showMessageDialog(this, "Não há exemplares disponíveis deste livro.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-        }
-
-        if (!livroEncontrado) {
-            JOptionPane.showMessageDialog(this, "Livro não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        for (Cliente cliente : clientes) {
-            if (cliente.getNome().equalsIgnoreCase(nomeCliente)) {
-                clienteEncontrado = true;
-                clienteEmprestimo = cliente;
+    for (Livro livro : livros) {
+        if (livro.getTitulo().equalsIgnoreCase(tituloLivro)) {
+            livroEncontrado = true;
+            if (livro.getExemplaresDisponiveis() > 0) {
+                livroEmprestado = livro;
                 break;
+            } else {
+                JOptionPane.showMessageDialog(this, "Não há exemplares disponíveis deste livro.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         }
+    }
 
-        if (!clienteEncontrado) {
-            JOptionPane.showMessageDialog(this, "Cliente não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
+    if (!livroEncontrado) {
+        JOptionPane.showMessageDialog(this, "Livro não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    for (Cliente cliente : clientes) {
+        if (cliente.getNome().equalsIgnoreCase(nomeCliente)) {
+            clienteEncontrado = true;
+            clienteEmprestimo = cliente;
+            break;
         }
+    }
 
-        LocalDate dataEmprestimo = LocalDate.parse(diaEmprestimo + "/" + mesAnoEmprestimo, DateTimeFormatter.ofPattern("d/MM/yyyy"));
-        Emprestimo emprestimo = new Emprestimo(livroEmprestado, clienteEmprestimo, dataEmprestimo);
-        emprestimos.add(emprestimo);
-        livroEmprestado.setExemplaresDisponiveis(livroEmprestado.getExemplaresDisponiveis() - 1);
-    modeloTabela.addRow(new Object[]{tituloLivro,nomeCliente,diaEmprestimo,mesAnoEmprestimo});
-        JOptionPane.showMessageDialog(this, "Empréstimo registrado com sucesso para o cliente " + nomeCliente + "!");
-        atualizarTabelaEmprestimos();
+    if (!clienteEncontrado) {
+        JOptionPane.showMessageDialog(this, "Cliente não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    Emprestimo emprestimo = new Emprestimo(livroEmprestado, clienteEmprestimo, diaEmprestimo);
+    emprestimos.add(emprestimo);
+    livroEmprestado.setExemplaresDisponiveis(livroEmprestado.getExemplaresDisponiveis() - 1);
+    modeloTabela.addRow(new Object[]{tituloLivro, nomeCliente, diaEmprestimo, mesAnoEmprestimo});
+    JOptionPane.showMessageDialog(this, "Empréstimo registrado com sucesso para o cliente " + nomeCliente + "!");
+    atualizarTabelaEmprestimos();
     }
      private void atualizarTabelaEmprestimos() {
         DefaultTableModel model = (DefaultTableModel) tbEmprestimos.getModel();
@@ -105,8 +104,6 @@ private ArrayList<Emprestimo> emprestimos;
             model.addRow(new Object[]{
                 emprestimo.getLivro().getTitulo(),
                 emprestimo.getCliente().getNome(),
-                emprestimo.getDataEmprestimo().format(DateTimeFormatter.ofPattern("DD/MM/AAAA")),
-                emprestimo.getDataDevolucao().format(DateTimeFormatter.ofPattern("DD/MM/AAAA"))
             });
         }
     }
